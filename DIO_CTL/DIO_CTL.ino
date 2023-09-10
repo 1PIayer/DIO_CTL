@@ -22,15 +22,16 @@ void loop() {
     Serial.readBytes(Rxbuffer, 8);
     if(Rxbuffer[0]== 0x48){
       if(Rxbuffer[1]==0){
-        for(cnt=1;cnt<12;cnt++){
-          pinMode(cnt,1);
-        }
+        unsigned char DioBuffer[4]={Rxbuffer[2],Rxbuffer[3],Rxbuffer[4],Rxbuffer[5]};
+        setPins(DioBuffer,4);
       }
       else if(Rxbuffer[1]==1){
-        //digitalWrite(1);
+        unsigned char DioBuffer[4]={Rxbuffer[2],Rxbuffer[3],Rxbuffer[4],Rxbuffer[5]};
+        WritePins(DioBuffer,4);
       }
       else if(Rxbuffer[1]==2){
-        //digitalRead(1);
+        unsigned char DioBuffer[4]={0};
+        ReadPins(DioBuffer,4);
       }
       else{
         Txbuffer[1]= COMMAND_TYPE_ERROR;
@@ -42,4 +43,16 @@ void loop() {
       Serial.write(Txbuffer,8);
     }      
   }
+}
+
+void setPins(unsigned char * buffer, unsigned char size){
+  for(cnt=1;cnt<9;cnt++){
+    pinMode(cnt,1);
+  }
+}
+void WritePins(unsigned char * buffer, unsigned char size){
+  //digitalWrite(1);
+}
+void ReadPins(unsigned char * buffer, unsigned char size){
+  //digitalRead(1);
 }
